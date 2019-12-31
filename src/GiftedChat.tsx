@@ -797,6 +797,8 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
         this.props.minComposerHeight!,
         this.state.composerHeight!,
       ),
+      renderActions: null,
+      renderAccessory: null,
       onSend: this.onSend,
       onInputSizeChanged: this.onInputSizeChanged,
       onTextChanged: this.onInputTextChanged,

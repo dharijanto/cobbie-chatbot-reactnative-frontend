@@ -72,3 +72,18 @@ export interface MessageVideoProps<TMessage extends IMessage> {
   // TODO: should be LightBox properties
   lightboxProps?: object
 }
+
+export type FrontendResponseType = 'nop' | 'button' | 'checkbox' | 'text'
+export interface FrontendResponse {
+  timestamp: number
+  type: FrontendResponseType
+  responseIndex?: number
+  responseIndexes: number[]
+  data?: string
+}
+
+export interface FrontendAction {
+  timestamp: number
+  messages: string[]
+  responses: Array<{ type: string, text: string }>
+}

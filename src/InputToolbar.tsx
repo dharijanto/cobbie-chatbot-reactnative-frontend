@@ -14,6 +14,7 @@ import Composer from './Composer'
 import Send from './Send'
 import Actions from './Actions'
 import Color from './Color'
+import PreDefinedResponse from './PreDefinedResponse';
 
 const styles = StyleSheet.create({
   container: {
@@ -140,6 +141,26 @@ export default class InputToolbar extends React.Component<
     return <Composer {...this.props} />
   }
 
+  renderPreDefinedResponse() {
+    const frontendAction = {
+      "timestamp": 1577630306269,
+      "messages": [
+          "What questions do you have for me? :)"
+      ],
+      "responses": [
+          {
+              "type": "button",
+              "text": "How can we help improving P&G?"
+          },
+          {
+              "type": "button",
+              "text": "Nope, no more question!"
+          }
+      ]
+  }
+    return <PreDefinedResponse {...this.props} frontendAction={frontendAction} />
+  }
+
   renderAccessory() {
     if (this.props.renderAccessory) {
       return (
@@ -164,7 +185,8 @@ export default class InputToolbar extends React.Component<
       >
         <View style={[styles.primary, this.props.primaryStyle]}>
           {this.renderActions()}
-          {this.renderComposer()}
+          {/* this.renderComposer() */}
+          {this.renderPreDefinedResponse()}
           {this.renderSend()}
         </View>
         {this.renderAccessory()}

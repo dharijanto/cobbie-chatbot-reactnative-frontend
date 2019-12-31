@@ -12,9 +12,9 @@ export default function NavBarCustom() {
       <NavBar>
         <NavButton />
         <NavTitle>
-          💬 Gifted Chat{'\n'}
+          💬 Cobbie - Corporate Buddy {'\n'}
           <Text style={{ fontSize: 10, color: '#aaa' }}>
-            ({Constants.expoVersion})
+            Alpha Release - 0.1 (Demo Only)
           </Text>
         </NavTitle>
         <NavButton />
