@@ -77,6 +77,7 @@ export type FrontendResponseType = 'nop' | 'button' | 'checkbox' | 'text'
 export interface FrontendResponse {
   timestamp: number
   type: FrontendResponseType
+  text: string
   responseIndex?: number
   responseIndexes?: number[]
   data?: string

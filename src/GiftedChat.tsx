@@ -138,7 +138,7 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
   messageIdGenerator?(message?: TMessage): string
   /* Callback when sending a message */
   onSend?(messages: TMessage[]): void
-  onFrontendResponse?(frontendResponse: FrontendResponse): void
+  onFrontendResponse?(message: IMessage): void
   /*Callback when loading earlier messages*/
   onLoadEarlier?(): void
   /*  Render a loading view when initializing */
@@ -702,8 +702,15 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
 
   onFrontendResponse = (frontendResponse: FrontendResponse) => {
     console.log(`GiftedChat: onFrontendResponse(): frontendResponse=${JSON.stringify(frontendResponse)}`)
+    const newMessage: any = {
+        text: frontendResponse.text,
+        user: this.props.user!,
+        createdAt: new Date(),
+        _id: this.props.messageIdGenerator && this.props.messageIdGenerator(),
+      }
+
     if (this.props.onFrontendResponse) {
-      this.props.onFrontendResponse(frontendResponse)
+      this.props.onFrontendResponse(newMessage)
     } else {
       console.error('this.props.onFrontendResponse is not defined!')
     }

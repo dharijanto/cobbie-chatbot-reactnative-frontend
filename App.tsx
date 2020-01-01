@@ -79,10 +79,20 @@ export default class App extends Component {
     }, 1000) // simulating network
   }
 
-  // TODO: Fix this...
-  onFrontendResponse = (frontendResponse: FrontendResponse) => {
-    console.log(`App.onFrontendResponse(): frontendResponse=${JSON.stringify(frontendResponse)}`)
-    const message: any = {
+  // Here, the message is already formatted
+  onFrontendResponse = (message) => {
+    console.log(`App.onFrontendResponse(): frontendResponse=${JSON.stringify(message)}`)
+    this.setState((previousState: any) => {
+      const sentMessages = [{ ...message, sent: true, received: true }]
+      return {
+        messages: GiftedChat.append(
+          previousState.messages,
+          sentMessages,
+          Platform.OS !== 'web',
+        )
+      }
+    })
+    /* const message: any = {
       sent: true,
       received: true
     }
@@ -92,7 +102,7 @@ export default class App extends Component {
           messages: GiftedChat.append(previousState.messages, [message]),
         }
       }
-    )
+    ) */
   }
 
   onSend = (messages = []) => {

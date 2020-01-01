@@ -57,6 +57,7 @@ export default class PreDefinedResponse extends React.Component<PreDefinedRespon
       const frontendResponse: FrontendResponse = {
         timestamp: new Date().getTime(),
         type: 'button',
+        text: item.text,
         responseIndex: index
       }
       props.onFrontendResponse(frontendResponse)
@@ -77,10 +78,9 @@ export default class PreDefinedResponse extends React.Component<PreDefinedRespon
           horizontal={false}
           scrollEnabled={true}
           data={this.props.frontendAction.responses}
-          keyExtractor={((_: any, index) => '' + index)}
+          keyExtractor={(tem, index) => String(index)}
           renderItem={this.renderButton.bind(this)}
         ></FlatList>
-        <Button title={'item.text'} onPress={() => this.props.onFrontendResponse({} as any)}/>
       </View>
     )
   }
