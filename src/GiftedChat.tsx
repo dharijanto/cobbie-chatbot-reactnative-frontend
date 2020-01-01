@@ -45,7 +45,7 @@ import {
   TIME_FORMAT,
   DATE_FORMAT,
 } from './Constant'
-import { IMessage, User, Reply, LeftRightStyle } from './types'
+import { IMessage, User, Reply, LeftRightStyle, FrontendResponse, FrontendAction, FrontendActionResponse } from './types'
 import QuickReplies from './QuickReplies'
 
 // const GiftedActionSheet = ActionSheet as any
@@ -138,6 +138,7 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
   messageIdGenerator?(message?: TMessage): string
   /* Callback when sending a message */
   onSend?(messages: TMessage[]): void
+  onFrontendResponse?(frontendResponse: FrontendResponse): void
   /*Callback when loading earlier messages*/
   onLoadEarlier?(): void
   /*  Render a loading view when initializing */
@@ -225,6 +226,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     messageIdGenerator: () => uuid.v4(),
     user: {},
     onSend: () => {},
+    onFrontendResponse: () => {},
     locale: null,
     timeFormat: TIME_FORMAT,
     dateFormat: DATE_FORMAT,
@@ -294,6 +296,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     messageIdGenerator: PropTypes.func,
     user: PropTypes.object,
     onSend: PropTypes.func,
+    onFrontendResponse: PropTypes.func,
     locale: PropTypes.string,
     timeFormat: PropTypes.string,
     dateFormat: PropTypes.string,
@@ -697,6 +700,15 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     }
   }
 
+  onFrontendResponse = (frontendResponse: FrontendResponse) => {
+    console.log(`GiftedChat: onFrontendResponse(): frontendResponse=${JSON.stringify(frontendResponse)}`)
+    if (this.props.onFrontendResponse) {
+      this.props.onFrontendResponse(frontendResponse)
+    } else {
+      console.error('this.props.onFrontendResponse is not defined!')
+    }
+  }
+
   resetInputToolbar() {
     if (this.textInput) {
       this.textInput.clear()
@@ -800,6 +812,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
       renderActions: null,
       renderAccessory: null,
       onSend: this.onSend,
+      onFrontendResponse: this.onFrontendResponse,
       onInputSizeChanged: this.onInputSizeChanged,
       onTextChanged: this.onInputTextChanged,
       textInputProps: {

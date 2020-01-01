@@ -15,6 +15,7 @@ import Send from './Send'
 import Actions from './Actions'
 import Color from './Color'
 import PreDefinedResponse from './PreDefinedResponse';
+import { FrontendResponse } from './types'
 
 const styles = StyleSheet.create({
   container: {
@@ -45,6 +46,7 @@ export interface InputToolbarProps {
   renderSend?(props: Send['props']): React.ReactNode
   renderComposer?(props: Composer['props']): React.ReactNode
   onPressActionButton?(): void
+  onFrontendResponse?(frontendResponse: FrontendResponse): void
 }
 
 export default class InputToolbar extends React.Component<
@@ -60,6 +62,7 @@ export default class InputToolbar extends React.Component<
     primaryStyle: {},
     accessoryStyle: {},
     onPressActionButton: () => {},
+    onFrontendResponse: () => {}
   }
 
   static propTypes = {
@@ -89,6 +92,7 @@ export default class InputToolbar extends React.Component<
       'keyboardWillHide',
       this.keyboardWillHide,
     )
+    console.log(`InputToolbar.onPressActionButton(): ${JSON.stringify(this.props.onPressActionButton)}`)
   }
 
   componentWillUnmount() {
@@ -141,6 +145,18 @@ export default class InputToolbar extends React.Component<
     return <Composer {...this.props} />
   }
 
+  test (): any {
+    console.log('test')
+  }
+
+  onFrontendResponse = (frontendResponse: FrontendResponse): any => {
+    if (this.props.onFrontendResponse) {
+      return this.props.onFrontendResponse(frontendResponse)
+    } else {
+      console.error(`[InputToolbar] this.props.onFrontendResponse() is not defined!`)
+    }
+  }
+
   renderPreDefinedResponse() {
     const frontendAction = {
       "timestamp": 1577630306269,
@@ -157,8 +173,13 @@ export default class InputToolbar extends React.Component<
               "text": "Nope, no more question!"
           }
       ]
-  }
-    return <PreDefinedResponse {...this.props} frontendAction={frontendAction} />
+    }
+    const { ...props } = this.props
+    return <PreDefinedResponse
+              onFrontendResponse={this.onFrontendResponse}
+              test={this.test}
+              frontendAction={frontendAction}
+           />
   }
 
   renderAccessory() {

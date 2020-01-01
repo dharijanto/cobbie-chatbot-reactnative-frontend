@@ -1,7 +1,7 @@
 import { AppLoading, Asset, Linking } from 'expo'
 import React, { Component } from 'react'
 import { StyleSheet, View, Text, Platform } from 'react-native'
-import { Bubble, GiftedChat, SystemMessage, IMessage } from './src'
+import { Bubble, GiftedChat, SystemMessage, IMessage, FrontendResponse } from './src'
 
 import AccessoryBar from './example-expo/AccessoryBar'
 import CustomActions from './example-expo/CustomActions'
@@ -46,7 +46,7 @@ export default class App extends Component {
     this._isMounted = true
     // init with only system messages
     this.setState({
-      messages: messagesData, // messagesData.filter(message => message.system),
+      messages: [], // messagesData, // messagesData.filter(message => message.system),
       appIsReady: true,
     })
   }
@@ -77,6 +77,22 @@ export default class App extends Component {
         })
       }
     }, 1000) // simulating network
+  }
+
+  // TODO: Fix this...
+  onFrontendResponse = (frontendResponse: FrontendResponse) => {
+    console.log(`App.onFrontendResponse(): frontendResponse=${JSON.stringify(frontendResponse)}`)
+    const message: any = {
+      sent: true,
+      received: true
+    }
+    this.setState((previousState: any) =>
+      {
+        return {
+          messages: GiftedChat.append(previousState.messages, [message]),
+        }
+      }
+    )
   }
 
   onSend = (messages = []) => {
@@ -234,6 +250,7 @@ export default class App extends Component {
         <GiftedChat
           messages={this.state.messages}
           onSend={this.onSend}
+          onFrontendResponse={this.onFrontendResponse}
           loadEarlier={this.state.loadEarlier}
           onLoadEarlier={this.onLoadEarlier}
           isLoadingEarlier={this.state.isLoadingEarlier}

@@ -78,12 +78,17 @@ export interface FrontendResponse {
   timestamp: number
   type: FrontendResponseType
   responseIndex?: number
-  responseIndexes: number[]
+  responseIndexes?: number[]
   data?: string
+}
+
+export interface FrontendActionResponse {
+  type: string
+  text: string
 }
 
 export interface FrontendAction {
   timestamp: number
   messages: string[]
-  responses: Array<{ type: string, text: string }>
+  responses: FrontendActionResponse[]
 }

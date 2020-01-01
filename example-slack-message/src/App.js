@@ -34,6 +34,16 @@ export default class App extends React.Component {
     }))
   }
 
+  onFrontendResponse(frontendResponse) {
+    console.log(`App.onFrontendResponse(): frontendResponse=${JSON.stringify(frontendResponse)}`)
+    const message = {
+      text: frontendResponse.text
+    }
+    this.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, [message]),
+    }))
+  }
+
   renderMessage(props) {
     const {
       currentMessage: { text: currText },
@@ -58,6 +68,7 @@ export default class App extends React.Component {
       <GiftedChat
         messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
+        onFrontendResponse={this.onFrontendResponse}
         user={{
           _id: 1,
         }}
