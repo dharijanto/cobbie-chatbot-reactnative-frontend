@@ -15,7 +15,7 @@ import Send from './Send'
 import Actions from './Actions'
 import Color from './Color'
 import PreDefinedResponse from './PreDefinedResponse';
-import { FrontendResponse } from './types'
+import { FrontendResponse, FrontendAction } from './types'
 
 const styles = StyleSheet.create({
   container: {
@@ -41,6 +41,7 @@ export interface InputToolbarProps {
   containerStyle?: StyleProp<ViewStyle>
   primaryStyle?: StyleProp<ViewStyle>
   accessoryStyle?: StyleProp<ViewStyle>
+  frontendAction?: FrontendAction
   renderAccessory?(props: InputToolbarProps): React.ReactNode
   renderActions?(props: Actions['props']): React.ReactNode
   renderSend?(props: Send['props']): React.ReactNode
@@ -74,6 +75,7 @@ export default class InputToolbar extends React.Component<
     containerStyle: ViewPropTypes.style,
     primaryStyle: ViewPropTypes.style,
     accessoryStyle: ViewPropTypes.style,
+    frontendAction: PropTypes.object
   }
 
   state = {
@@ -158,27 +160,11 @@ export default class InputToolbar extends React.Component<
   }
 
   renderPreDefinedResponse() {
-    const frontendAction = {
-      "timestamp": 1577630306269,
-      "messages": [
-          "What questions do you have for me? :)"
-      ],
-      "responses": [
-          {
-              "type": "button",
-              "text": "How can we help improving P&G?"
-          },
-          {
-              "type": "button",
-              "text": "Nope, no more question!"
-          }
-      ]
-    }
     const { ...props } = this.props
     return <PreDefinedResponse
               onFrontendResponse={this.onFrontendResponse}
               test={this.test}
-              frontendAction={frontendAction}
+              frontendAction={this.props.frontendAction}
            />
   }
 

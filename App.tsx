@@ -25,8 +25,8 @@ const user = {
 
 const otherUser = {
   _id: 2,
-  name: 'React Native',
-  avatar: 'https://facebook.github.io/react/img/logo_og.png',
+  name: 'Cobbie'/* ,
+  avatar: 'https://facebook.github.io/react/img/logo_og.png', */
 }
 
 export default class App extends Component {
@@ -83,7 +83,7 @@ export default class App extends Component {
   onFrontendResponse = (message) => {
     console.log(`App.onFrontendResponse(): frontendResponse=${JSON.stringify(message)}`)
     this.setState((previousState: any) => {
-      const sentMessages = [{ ...message, sent: true, received: true }]
+      const sentMessages = [{ ...message, sent: true, received: false }]
       return {
         messages: GiftedChat.append(
           previousState.messages,
@@ -260,6 +260,7 @@ export default class App extends Component {
         <GiftedChat
           messages={this.state.messages}
           onSend={this.onSend}
+          onReceive={this.onReceive}
           onFrontendResponse={this.onFrontendResponse}
           loadEarlier={this.state.loadEarlier}
           onLoadEarlier={this.onLoadEarlier}

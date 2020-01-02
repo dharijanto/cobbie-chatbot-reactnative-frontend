@@ -37,6 +37,7 @@ import MessageContainer from './MessageContainer'
 import Send from './Send'
 import Time from './Time'
 import GiftedAvatar from './GiftedAvatar'
+import CobbieService from './services/cobbie-service'
 
 import {
   MIN_COMPOSER_HEIGHT,
@@ -138,6 +139,7 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
   messageIdGenerator?(message?: TMessage): string
   /* Callback when sending a message */
   onSend?(messages: TMessage[]): void
+  onReceive(text: string): void
   onFrontendResponse?(message: IMessage): void
   /*Callback when loading earlier messages*/
   onLoadEarlier?(): void
@@ -206,6 +208,7 @@ export interface GiftedChatState<TMessage extends IMessage = IMessage> {
   typingDisabled: boolean
   text?: string
   messages?: TMessage[]
+  frontendAction?: FrontendAction
 }
 
 class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
@@ -226,6 +229,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     messageIdGenerator: () => uuid.v4(),
     user: {},
     onSend: () => {},
+    onReceive: () => {},
     onFrontendResponse: () => {},
     locale: null,
     timeFormat: TIME_FORMAT,
@@ -296,6 +300,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     messageIdGenerator: PropTypes.func,
     user: PropTypes.object,
     onSend: PropTypes.func,
+    onReceive: PropTypes.func,
     onFrontendResponse: PropTypes.func,
     locale: PropTypes.string,
     timeFormat: PropTypes.string,
@@ -424,6 +429,48 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     this.initLocale()
     this.setMessages(messages || [])
     this.setTextFromProp(text)
+
+    // TODO: Use axios to call backend
+    const frontendAction = {
+      "timestamp": 1577630306269,
+      "messages": [
+          "What questions do you have for me? :)"
+      ],
+      "responses": [
+          {
+              "type": "button",
+              "text": "How can we help improving P&G?"
+          },
+          {
+              "type": "button",
+              "text": "Nope, no more question!"
+          }
+      ]
+    }
+    CobbieService.getCurrentState(1).then(resp => {
+      // Send the messages
+      if (resp.status && resp.data) {
+        this.onBackendResponse(resp.data)
+      } else {
+        console.error('Failed to retrieve chatbot state: ' + resp.errMessage)
+      }
+
+    })
+  }
+
+  onBackendResponse (frontendAction: FrontendAction) {
+    const messages = frontendAction.messages
+    messages.forEach((message: string) => {
+      this.props.onReceive(message)
+    })
+
+    this.setState(previousState => {
+      return {
+        ...previousState,
+        frontendAction/* ,
+        messagesContainerHeight: 500, */
+      }
+    })
   }
 
   componentWillUnmount() {
@@ -648,7 +695,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
       <View
         style={[
           {
-            height: this.state.messagesContainerHeight,
+            height: 300,// this.state.messagesContainerHeight,
           },
           messagesContainerStyle,
         ]}
@@ -711,6 +758,13 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
 
     if (this.props.onFrontendResponse) {
       this.props.onFrontendResponse(newMessage)
+      CobbieService.postFrontendAction(1, frontendResponse).then(resp => {
+        if (resp.status && resp.data) {
+          this.onBackendResponse(resp.data)
+        } else {
+          console.error('Failed to postFrontendAction(): ' + resp.errMessage)
+        }
+      })
     } else {
       console.error('this.props.onFrontendResponse is not defined!')
     }
@@ -816,6 +870,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
         this.props.minComposerHeight!,
         this.state.composerHeight!,
       ),
+      frontendAction: this.state.frontendAction,
       renderActions: null,
       renderAccessory: null,
       onSend: this.onSend,

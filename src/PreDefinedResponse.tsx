@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 })
 
 export interface PreDefinedResponseProps {
-  frontendAction: FrontendAction,
+  frontendAction?: FrontendAction,
   onButtonPressed(selectionIndex: number): () => {}
   onFrontendResponse(frontendResponse: FrontendResponse): () => {}
   onInputSizeChanged?(text: string): void
@@ -77,7 +77,7 @@ export default class PreDefinedResponse extends React.Component<PreDefinedRespon
         <FlatList
           horizontal={false}
           scrollEnabled={true}
-          data={this.props.frontendAction.responses}
+          data={this.props.frontendAction ? this.props.frontendAction.responses : []}
           keyExtractor={(tem, index) => String(index)}
           renderItem={this.renderButton.bind(this)}
         ></FlatList>
