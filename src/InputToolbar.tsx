@@ -22,13 +22,15 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: Color.defaultColor,
     backgroundColor: Color.white,
+    width: '100%'
+    /*
     bottom: 0,
     left: 0,
-    right: 0,
+    right: 0, */
   },
   primary: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+    /* flexDirection: 'row',
+    alignItems: 'flex-end', */
   },
   accessory: {
     height: 44,
@@ -62,6 +64,7 @@ export default class InputToolbar extends React.Component<
     containerStyle: {},
     primaryStyle: {},
     accessoryStyle: {},
+    frontendAction: null,
     onPressActionButton: () => {},
     onFrontendResponse: () => {}
   }
@@ -185,8 +188,11 @@ export default class InputToolbar extends React.Component<
         style={
           [
             styles.container,
-            this.props.containerStyle,
-            { position: this.state.position },
+            /* {
+              height: 400
+            }, */
+            this.props.containerStyle/* ,
+            { position: this.state.position }, */
           ] as ViewStyle
         }
       >

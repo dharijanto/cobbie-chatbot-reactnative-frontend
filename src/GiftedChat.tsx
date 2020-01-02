@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { RefObject } from 'react'
+
 import {
   Animated,
   Platform,
@@ -11,6 +12,7 @@ import {
   FlatList,
   TextStyle,
   KeyboardAvoidingView,
+  Dimensions,
 } from 'react-native'
 
 import {
@@ -139,7 +141,7 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
   messageIdGenerator?(message?: TMessage): string
   /* Callback when sending a message */
   onSend?(messages: TMessage[]): void
-  onReceive(text: string): void
+  onReceive?(text: string): void
   onFrontendResponse?(message: IMessage): void
   /*Callback when loading earlier messages*/
   onLoadEarlier?(): void
@@ -208,7 +210,6 @@ export interface GiftedChatState<TMessage extends IMessage = IMessage> {
   typingDisabled: boolean
   text?: string
   messages?: TMessage[]
-  frontendAction?: FrontendAction
 }
 
 class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
@@ -431,22 +432,6 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     this.setTextFromProp(text)
 
     // TODO: Use axios to call backend
-    const frontendAction = {
-      "timestamp": 1577630306269,
-      "messages": [
-          "What questions do you have for me? :)"
-      ],
-      "responses": [
-          {
-              "type": "button",
-              "text": "How can we help improving P&G?"
-          },
-          {
-              "type": "button",
-              "text": "Nope, no more question!"
-          }
-      ]
-    }
     CobbieService.getCurrentState(1).then(resp => {
       // Send the messages
       if (resp.status && resp.data) {
@@ -461,7 +446,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
   onBackendResponse (frontendAction: FrontendAction) {
     const messages = frontendAction.messages
     messages.forEach((message: string) => {
-      this.props.onReceive(message)
+      this.props.onReceive!(message)
     })
 
     this.setState(previousState => {
@@ -694,9 +679,6 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     const fragment = (
       <View
         style={[
-          {
-            height: 300,// this.state.messagesContainerHeight,
-          },
           messagesContainerStyle,
         ]}
       >
@@ -704,6 +686,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
           {...messagesContainerProps}
           invertibleScrollViewProps={this.invertibleScrollViewProps}
           messages={this.getMessages()}
+          frontendAction={this.state.frontendAction}
           forwardRef={this._messageContainerRef}
         />
         {this.renderChatFooter()}
@@ -732,7 +715,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
 
     if (shouldResetInputToolbar === true) {
       this.setIsTypingDisabled(true)
-      this.resetInputToolbar()
+      // this.resetInputToolbar()
     }
     if (this.props.onSend) {
       this.props.onSend(newMessages)
@@ -928,7 +911,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   safeArea: {
     flex: 1,

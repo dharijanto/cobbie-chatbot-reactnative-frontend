@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import { FlatList, StyleSheet, TextInput, View, Button } from 'react-native'
+import { FlatList, StyleSheet, TextInput, View, Button, Dimensions } from 'react-native'
 import { FrontendAction, FrontendActionResponse, FrontendResponse } from './types';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    /* flex: 1, */
     padding: 5,
     fontSize: 16
   },
@@ -53,7 +53,6 @@ export default class PreDefinedResponse extends React.Component<PreDefinedRespon
   renderButton({item, index}: {item: FrontendActionResponse, index: number}) {
     const props = { ...this.props }
     function onPress () {
-      console.log('renderButton().onPress(): this.props=' + JSON.stringify(Object.keys(this.props)))
       const frontendResponse: FrontendResponse = {
         timestamp: new Date().getTime(),
         type: 'button',

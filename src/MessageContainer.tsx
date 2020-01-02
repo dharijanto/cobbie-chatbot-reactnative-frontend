@@ -14,31 +14,33 @@ import {
   NativeScrollEvent,
   StyleProp,
   ViewStyle,
+  Dimensions,
 } from 'react-native'
 
 import LoadEarlier from './LoadEarlier'
 import Message from './Message'
 import Color from './Color'
-import { User, IMessage, Reply } from './types'
+import { User, IMessage, Reply, FrontendAction } from './types'
 import { warning } from './utils'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    /* maxHeight: 500 */
+    /* flex: 1, */
   },
   containerAlignTop: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    /* flexDirection: 'row',
+    alignItems: 'flex-start', */
   },
   contentContainerStyle: {
-    flexGrow: 1,
-    justifyContent: 'flex-start',
+    /* flexGrow: 1, */
+    /* justifyContent: 'flex-start', */
   },
   headerWrapper: {
-    flex: 1,
+    /* flex: 1, */
   },
   listStyle: {
-    flex: 1,
+    /* flex: 1, */
   },
   scrollToBottomStyle: {
     opacity: 0.8,
@@ -60,6 +62,7 @@ const styles = StyleSheet.create({
 })
 
 export interface MessageContainerProps<TMessage extends IMessage> {
+  frontendAction: FrontendAction
   messages?: TMessage[]
   user?: User
   listViewProps: Partial<ListViewProps>
@@ -89,6 +92,7 @@ export default class MessageContainer<
   TMessage extends IMessage = IMessage
 > extends React.PureComponent<MessageContainerProps<TMessage>, State> {
   static defaultProps = {
+    frontendAction: null,
     messages: [],
     user: {},
     renderChatEmpty: null,
@@ -350,10 +354,18 @@ export default class MessageContainer<
 
   render() {
     const { inverted } = this.props
+    const fullHeight = Dimensions.get('window').height - 50
+    let height = fullHeight
+    if (this.props.frontendAction && this.props.frontendAction.responses.length > 0) {
+      height = fullHeight - this.props.frontendAction.responses.length * 52
+    }
     return (
       <View
         style={
-          this.props.alignTop ? styles.containerAlignTop : styles.container
+          [ this.props.alignTop ? styles.containerAlignTop : styles.container,
+            {
+              height
+            }]
         }
       >
         {this.state.showScrollBottom && this.props.scrollToBottom
