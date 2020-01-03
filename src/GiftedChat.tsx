@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { RefObject } from 'react'
 
+import * as Promise from 'bluebird'
+
 import {
   Animated,
   Platform,
@@ -50,6 +52,7 @@ import {
 } from './Constant'
 import { IMessage, User, Reply, LeftRightStyle, FrontendResponse, FrontendAction, FrontendActionResponse } from './types'
 import QuickReplies from './QuickReplies'
+import { promises } from 'fs';
 
 // const GiftedActionSheet = ActionSheet as any
 
@@ -210,6 +213,7 @@ export interface GiftedChatState<TMessage extends IMessage = IMessage> {
   typingDisabled: boolean
   text?: string
   messages?: TMessage[]
+  frontendAction?: FrontendAction
 }
 
 class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
@@ -401,6 +405,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     typingDisabled: false,
     text: undefined,
     messages: undefined,
+    frontendAction: undefined
   }
 
   constructor(props: GiftedChatProps<TMessage>) {
@@ -445,17 +450,24 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
 
   onBackendResponse (frontendAction: FrontendAction) {
     const messages = frontendAction.messages
-    messages.forEach((message: string) => {
-      this.props.onReceive!(message)
+    // Simulate some delay so the chatbot experience is more
+    // realistic
+    messages.reduce((acc, message) => {
+      return acc.then(() => {
+        this.props.onReceive!(message)
+        return Promise.delay(message.length * 30)
+      })
+    }, Promise.delay(500)).then(() => {
+      Promise.delay(1000).then(() => {
+        this.setState(previousState => {
+          return {
+            ...previousState,
+            frontendAction
+          }
+        })
+      })
     })
 
-    this.setState(previousState => {
-      return {
-        ...previousState,
-        frontendAction/* ,
-        messagesContainerHeight: 500, */
-      }
-    })
   }
 
   componentWillUnmount() {
@@ -730,16 +742,27 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     }
   }
 
+  disablePreDefinedResponse () {
+    this.setState(previousState => {
+      return {
+        ...previousState,
+        frontendAction: undefined
+      }
+    })
+  }
+
   onFrontendResponse = (frontendResponse: FrontendResponse) => {
     console.log(`GiftedChat: onFrontendResponse(): frontendResponse=${JSON.stringify(frontendResponse)}`)
     const newMessage: any = {
-        text: frontendResponse.text,
-        user: this.props.user!,
-        createdAt: new Date(),
-        _id: this.props.messageIdGenerator && this.props.messageIdGenerator(),
-      }
+      text: frontendResponse.text,
+      user: this.props.user!,
+      createdAt: new Date(),
+      _id: this.props.messageIdGenerator && this.props.messageIdGenerator(),
+    }
 
+    const oldFrontendAction = this.state.frontendAction
     if (this.props.onFrontendResponse) {
+      this.disablePreDefinedResponse()
       this.props.onFrontendResponse(newMessage)
       CobbieService.postFrontendAction(1, frontendResponse).then(resp => {
         if (resp.status && resp.data) {
@@ -747,6 +770,13 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
         } else {
           console.error('Failed to postFrontendAction(): ' + resp.errMessage)
         }
+      }).catch(err => {
+        this.setState(previousState => {
+          return {
+            ...previousState,
+            frontendAction: oldFrontendAction
+          }
+        })
       })
     } else {
       console.error('this.props.onFrontendResponse is not defined!')

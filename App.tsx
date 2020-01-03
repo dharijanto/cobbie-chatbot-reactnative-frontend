@@ -35,7 +35,7 @@ export default class App extends Component {
     step: 0,
     messages: [],
     loadEarlier: true,
-    typingText: null,
+    typingText: false,
     isLoadingEarlier: false,
     appIsReady: false,
   }

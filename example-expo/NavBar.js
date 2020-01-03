@@ -14,7 +14,7 @@ export default function NavBarCustom() {
         <NavTitle>
           💬 Cobbie - Corporate Buddy {'\n'}
           <Text style={{ fontSize: 10, color: '#aaa' }}>
-            Alpha Release - 0.1 (Demo Only)
+            Alpha Version - 0.1 (For Internal Demo Only)
           </Text>
         </NavTitle>
         <NavButton />
