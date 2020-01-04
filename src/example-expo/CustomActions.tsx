@@ -5,7 +5,9 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ViewStyle,
   ViewPropTypes,
+  StyleProp
 } from 'react-native'
 
 import {
@@ -14,7 +16,29 @@ import {
   takePictureAsync,
 } from './mediaUtils'
 
-export default class CustomActions extends React.Component {
+export interface CustomActionsProps {
+  wrapperStyle: StyleProp<ViewStyle>
+  iconTextStyle: StyleProp<ViewStyle>
+  onSend?({ text }: { text: string }, b: boolean): void
+  renderIcon?(): void
+}
+
+
+export default class CustomActions extends React.Component<CustomActionsProps> {
+  static defaultProps = {
+    onSend: null,
+    renderIcon: null,
+    wrapperStyle: {},
+    iconTextStyle: {}
+  }
+
+  static propTypes = {
+    onSend: PropTypes.func,
+    renderIcon: PropTypes.func,
+    wrapperStyle: ViewPropTypes.style,
+    iconTextStyle: ViewPropTypes.style
+  }
+
   onActionsPress = () => {
     const options = [
       'Choose From Library',
@@ -28,7 +52,7 @@ export default class CustomActions extends React.Component {
         options,
         cancelButtonIndex,
       },
-      async buttonIndex => {
+      async (buttonIndex: any) => {
         const { onSend } = this.props
         switch (buttonIndex) {
           case 0:

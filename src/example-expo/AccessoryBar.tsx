@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { MaterialIcons } from '@expo/vector-icons'
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
@@ -8,7 +9,19 @@ import {
   takePictureAsync,
 } from './mediaUtils'
 
-export default class AccessoryBar extends React.Component {
+export interface AccessoryBarProps {
+  onSend?({ text }: { text: string }, b: boolean): void
+}
+
+export default class AccessoryBar extends React.Component<AccessoryBarProps> {
+  static defaultProps = {
+    onSend: null
+  }
+
+  static propTypes = {
+    onSend: PropTypes.func
+  }
+
   render() {
     const { onSend } = this.props
     return (
@@ -26,7 +39,7 @@ const Button = ({
   size = 30,
   color = 'rgba(0,0,0,0.5)',
   ...props
-}) => (
+}: { onPress: () => {}, size?: number, color?: string, name: string }) => (
   <TouchableOpacity onPress={onPress}>
     <MaterialIcons size={size} color={color} {...props} />
   </TouchableOpacity>

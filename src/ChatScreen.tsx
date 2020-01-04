@@ -1,15 +1,14 @@
 import { AppLoading, Asset, Linking } from 'expo'
 import React, { Component } from 'react'
 import { StyleSheet, View, Text, Platform } from 'react-native'
-import { createAppContainer } from 'react-navigation'
-import { Bubble, GiftedChat, SystemMessage, IMessage, FrontendResponse } from './src'
+import { Bubble, GiftedChat, SystemMessage, IMessage, FrontendResponse } from '.'
 
-import AccessoryBar from './src/example-expo/AccessoryBar'
-import CustomActions from './src/example-expo/CustomActions'
-import CustomView from './src/example-expo/CustomView'
-import NavBar from './src/example-expo/NavBar'
-import messagesData from './src/example-expo/data/messages'
-import earlierMessages from './src/example-expo/data/earlierMessages'
+import AccessoryBar from './example-expo/AccessoryBar'
+import CustomActions from '../example-expo/CustomActions'
+import CustomView from '../example-expo/CustomView'
+import NavBar from '../example-expo/NavBar'
+import messagesData from '../example-expo/data/messages'
+import earlierMessages from '../example-expo/data/earlierMessages'
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
