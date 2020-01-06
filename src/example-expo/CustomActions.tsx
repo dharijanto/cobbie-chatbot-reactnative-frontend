@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import {
   StyleSheet,
   Text,
@@ -17,10 +17,11 @@ import {
 } from './mediaUtils'
 
 export interface CustomActionsProps {
-  wrapperStyle: StyleProp<ViewStyle>
+  wrapperStyle?: StyleProp<ViewStyle>
   iconTextStyle: StyleProp<ViewStyle>
+  containerStyle?: StyleProp<ViewStyle>
   onSend?({ text }: { text: string }, b: boolean): void
-  renderIcon?(): void
+  renderIcon?(): () => ReactNode
 }
 
 
@@ -29,14 +30,16 @@ export default class CustomActions extends React.Component<CustomActionsProps> {
     onSend: null,
     renderIcon: null,
     wrapperStyle: {},
-    iconTextStyle: {}
+    iconTextStyle: {},
+    containerStyle: {}
   }
 
   static propTypes = {
     onSend: PropTypes.func,
     renderIcon: PropTypes.func,
     wrapperStyle: ViewPropTypes.style,
-    iconTextStyle: ViewPropTypes.style
+    iconTextStyle: ViewPropTypes.style,
+    containerStyle: ViewPropTypes.style
   }
 
   onActionsPress = () => {
