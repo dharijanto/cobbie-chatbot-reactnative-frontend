@@ -1,6 +1,6 @@
 import { AppLoading, Asset, Linking } from 'expo'
 import React, { Component } from 'react'
-import { StyleSheet, View, Text, Platform } from 'react-native'
+import { StyleSheet, View, Text, Platform, Alert } from 'react-native'
 import { Bubble, GiftedChat, SystemMessage, IMessage } from '../'
 
 import AccessoryBar from '../example-expo/AccessoryBar'
@@ -269,11 +269,11 @@ export default class App extends Component {
           parsePatterns={this.parsePatterns}
           user={user}
           scrollToBottom
-          onLongPressAvatar={user => alert(JSON.stringify(user))}
-          onPressAvatar={() => alert('short press')}
+          onLongPressAvatar={user => Alert.alert(JSON.stringify(user))}
+          onPressAvatar={() => Alert.alert('short press')}
           onQuickReply={this.onQuickReply}
           keyboardShouldPersistTaps='never'
-          renderAccessory={Platform.OS === 'web' ? null : this.renderAccessory}
+          renderAccessory={Platform.OS === 'web' ? undefined : this.renderAccessory}
           renderActions={this.renderCustomActions}
           renderBubble={this.renderBubble}
           renderSystemMessage={this.renderSystemMessage}

@@ -10,7 +10,9 @@ import {
 } from './mediaUtils'
 
 export interface AccessoryBarProps {
-  onSend?({ text }: { text: string }, b: boolean): void
+  // This wasn't correct definition! At least what's passed form ChatScreen was different
+  // onSend?({ text }: { text: string }, b: boolean): void
+  onSend?(val: any): void
 }
 
 export default class AccessoryBar extends React.Component<AccessoryBarProps> {

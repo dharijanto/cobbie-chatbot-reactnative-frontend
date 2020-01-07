@@ -93,3 +93,17 @@ export interface FrontendAction {
   messages: string[]
   responses: FrontendActionResponse[]
 }
+
+export interface NCResponse<T> {
+  status: boolean,
+  data?: T,
+  errMessage?: string
+  errCode?: number
+}
+
+export interface Action<T extends string, U = any> {
+  type: T,
+  payload?: U
+}
+
+export type Dispatcher<T extends string> = (action: Action<T>) => void

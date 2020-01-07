@@ -6,7 +6,9 @@ import { createStackNavigator } from 'react-navigation-stack'
 
 import { Bubble, GiftedChat, SystemMessage, IMessage, FrontendResponse } from './src'
 
+import { Provider as AuthProvider } from './src/contexts/AuthContext'
 import ChatScreen from './src/screens/ChatScreen'
+import LoginScreen from './src/screens/LoginScreen'
 import AccessoryBar from './src/example-expo/AccessoryBar'
 import CustomActions from './src/example-expo/CustomActions'
 import CustomView from './src/example-expo/CustomView'
@@ -15,7 +17,8 @@ import messagesData from './src/example-expo/data/messages'
 import earlierMessages from './src/example-expo/data/earlierMessages'
 
 const navigator = createStackNavigator({
-  ChatScreen
+  ChatScreen,
+  LoginScreen
 }, {
   initialRouteName: 'ChatScreen',
   // initialRouteName: 'TestScreen',
@@ -33,6 +36,8 @@ const navigator = createStackNavigator({
 const App = createAppContainer(navigator)
 export default () => {
   return (
-    <App/>
+    <AuthProvider>
+      <App/>
+    </AuthProvider>
   )
 }
