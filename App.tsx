@@ -1,26 +1,20 @@
-import { AppLoading, Asset, Linking } from 'expo'
-import React, { Component } from 'react'
-import { StyleSheet, View, Text, Platform } from 'react-native'
+import React, { Component, useContext } from 'react'
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 
-import { Bubble, GiftedChat, SystemMessage, IMessage, FrontendResponse } from './src'
-
-import { Provider as AuthProvider } from './src/contexts/AuthContext'
+import { setNavigation } from './src/utils/navigation-helper'
+import { Context as AuthContext, Provider as AuthProvider } from './src/contexts/AuthContext'
 import ChatScreen from './src/screens/ChatScreen'
 import LoginScreen from './src/screens/LoginScreen'
-import AccessoryBar from './src/example-expo/AccessoryBar'
-import CustomActions from './src/example-expo/CustomActions'
-import CustomView from './src/example-expo/CustomView'
-import NavBar from './src/example-expo/NavBar'
-import messagesData from './src/example-expo/data/messages'
-import earlierMessages from './src/example-expo/data/earlierMessages'
+import LoadingScreen from './src/screens/LoadingScreen'
+// const { state: authState } = useContext<any>(AuthContext)
 
 const navigator = createStackNavigator({
   ChatScreen,
-  LoginScreen
+  LoginScreen,
+  LoadingScreen
 }, {
-  initialRouteName: 'ChatScreen',
+  initialRouteName: 'LoadingScreen',
   // initialRouteName: 'TestScreen',
   defaultNavigationOptions: {
     title: 'Filoshopy CMS'
@@ -37,7 +31,7 @@ const App = createAppContainer(navigator)
 export default () => {
   return (
     <AuthProvider>
-      <App/>
+      <App ref={(navigator) => setNavigation(navigator) } />
     </AuthProvider>
   )
 }

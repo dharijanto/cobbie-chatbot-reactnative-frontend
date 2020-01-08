@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { RefObject } from 'react'
+import React, { RefObject, useContext } from 'react'
 
 import * as Promise from 'bluebird'
 
@@ -42,6 +42,7 @@ import Send from './Send'
 import Time from './Time'
 import GiftedAvatar from './GiftedAvatar'
 import CobbieService from './services/cobbie-service'
+import { Context as AuthContext } from '../contexts/AuthContext'
 
 import {
   MIN_COMPOSER_HEIGHT,
