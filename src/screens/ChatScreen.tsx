@@ -1,5 +1,6 @@
 import { AppLoading, Asset, Linking } from 'expo'
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { StyleSheet, View, Text, Platform, Alert } from 'react-native'
 import { Bubble, GiftedChat, SystemMessage, IMessage } from '../'
 
@@ -29,7 +30,19 @@ const otherUser = {
   avatar: 'https://facebook.github.io/react/img/logo_og.png', */
 }
 
-export default class App extends Component {
+export interface ChatScreenProps {
+  navigation: any
+}
+
+export default class App extends Component<ChatScreenProps> {
+  static propTypes = {
+    navigation: PropTypes.object.isRequired
+  }
+
+  static defaultProps = {
+    navigation: { }
+  }
+
   state = {
     inverted: false,
     step: 0,
@@ -43,6 +56,7 @@ export default class App extends Component {
   _isMounted = false
 
   componentDidMount() {
+    console.log('haha')
     this._isMounted = true
     // init with only system messages
     this.setState({
@@ -249,6 +263,8 @@ export default class App extends Component {
     if (!this.state.appIsReady) {
       return <AppLoading />
     }
+    const { navigation } = this.props
+    const userId: number = navigation.getParam('userId', 0)
 
     return (
       <View
@@ -259,6 +275,7 @@ export default class App extends Component {
       >
         <NavBar />
         <GiftedChat
+          userId={userId}
           messages={this.state.messages}
           onSend={this.onSend}
           onReceive={this.onReceive}

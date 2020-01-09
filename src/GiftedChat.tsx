@@ -42,7 +42,6 @@ import Send from './Send'
 import Time from './Time'
 import GiftedAvatar from './GiftedAvatar'
 import CobbieService from './services/cobbie-service'
-import { Context as AuthContext } from '../contexts/AuthContext'
 
 import {
   MIN_COMPOSER_HEIGHT,
@@ -51,13 +50,13 @@ import {
   TIME_FORMAT,
   DATE_FORMAT,
 } from './Constant'
-import { IMessage, User, Reply, LeftRightStyle, FrontendResponse, FrontendAction, FrontendActionResponse } from './types'
+import { IMessage, User, Reply, LeftRightStyle, FrontendResponse, FrontendAction } from './types'
 import QuickReplies from './QuickReplies'
-import { promises } from 'fs';
 
 // const GiftedActionSheet = ActionSheet as any
 
 export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
+  userId?: number
   /* Messages to display */
   messages?: TMessage[]
   /* Messages container style */
@@ -227,6 +226,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
   }
 
   static defaultProps = {
+    userId: 0,
     messages: [],
     messagesContainerStyle: undefined,
     text: undefined,
@@ -294,6 +294,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
   }
 
   static propTypes = {
+    userId: PropTypes.number,
     messages: PropTypes.arrayOf(PropTypes.object),
     messagesContainerStyle: PropTypes.oneOfType([
       PropTypes.object,
@@ -438,7 +439,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     this.setTextFromProp(text)
 
     // TODO: Use axios to call backend
-    CobbieService.getCurrentState(1).then(resp => {
+    CobbieService.getCurrentState(this.props.userId!).then(resp => {
       // Send the messages
       if (resp.status && resp.data) {
         this.onBackendResponse(resp.data)
@@ -459,7 +460,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
         return Promise.delay(message.length * 30)
       })
     }, Promise.delay(500)).then(() => {
-      Promise.delay(1000).then(() => {
+      Promise.delay(0).then(() => {
         this.setState(previousState => {
           return {
             ...previousState,
@@ -765,7 +766,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     if (this.props.onFrontendResponse) {
       this.disablePreDefinedResponse()
       this.props.onFrontendResponse(newMessage)
-      CobbieService.postFrontendAction(1, frontendResponse).then(resp => {
+      CobbieService.postFrontendAction(this.props.userId!, frontendResponse).then(resp => {
         if (resp.status && resp.data) {
           this.onBackendResponse(resp.data)
         } else {

@@ -2,7 +2,6 @@ import { createDataContext, Action, Dispatcher } from '../index'
 import { AsyncStorage } from 'react-native'
 
 import CobbieService from '../services/cobbie-service';
-import { navigate } from '../utils/navigation-helper'
 
 type ACTION_TYPE = 'LOGIN' | 'REGISTER' | 'ERROR'
 
@@ -32,35 +31,40 @@ const mapReducer = (state: any, action: Action<ACTION_TYPE>) => {
 const apiCalls: any = {}
 
 apiCalls.login = (dispatch: Dispatcher<ACTION_TYPE>) => async (username: string, password: string) => {
-  CobbieService.login(username, password).then(resp => {
+  return CobbieService.login(username, password).then(resp => {
     if (resp.status && resp.data) {
       const userId = resp.data
       dispatch({ type: 'LOGIN', payload: userId })
-      navigate('ChatScreen', {})
+      return { status: true, data: userId }
+      // navigate('ChatScreen', {})
     } else {
       throw new Error(resp.errMessage)
     }
   }).catch(err => {
     dispatch({ type: 'ERROR', payload: err.message })
+    return { status: false, errMessage: err.message }
   })
 }
 
 apiCalls.tryLocalLogin = (dispatch: Dispatcher<ACTION_TYPE>) => async () => {
-  AsyncStorage.getItem('userId').then(result => {
+  return AsyncStorage.getItem('userId').then(result => {
     if (result && parseInt(result, 10) !== 0) {
+      const userId = parseInt(result, 10)
       dispatch({
         type: 'LOGIN',
         payload: {
-          userId: parseInt(result, 10)
+          userId
         }
       })
-      navigate('ChatScreen', {})
+      // navigate('ChatScreen', {})
+      return { status: true, data: userId }
     } else {
       throw new Error('Unexpected userId: ' + result)
     }
   }).catch(err => {
     // console.error(err)
-    navigate('LoginScreen', {})
+    // navigate('LoginScreen', {})
+    return { status: false, errMessage: err.message }
   })
 }
 
@@ -71,5 +75,5 @@ apiCalls.register = (dispatch: Dispatcher<ACTION_TYPE>) => async (username: stri
 export const { Provider, Context } = createDataContext(
   mapReducer,
   apiCalls,
-  { userId: 0 }
+  { userId: 0, errMessage: '' }
 )
