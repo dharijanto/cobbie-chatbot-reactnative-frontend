@@ -1,14 +1,14 @@
 import React from 'react'
-import { Text, Platform, SafeAreaView } from 'react-native'
+import { Button, Text, Platform, SafeAreaView } from 'react-native'
 import NavBar, { NavTitle, NavButton } from 'react-native-nav'
 import Constants from 'expo-constants'
 
-export default function NavBarCustom() {
+export default function NavBarCustom(props: any) {
   if (Platform.OS === 'web') {
     return null
   }
   return (
-    <SafeAreaView style={{ backgroundColor: '#f5f5f5' }}>
+    <SafeAreaView style={{ backgroundColor: '#f5f5f5', zIndex: 10 }}>
       <NavBar>
         <NavButton />
         <NavTitle>
@@ -18,6 +18,7 @@ export default function NavBarCustom() {
           </Text>
         </NavTitle>
         <NavButton />
+        <Button title="Profile" onPress={props.onProfileClicked}/>
       </NavBar>
     </SafeAreaView>
   )

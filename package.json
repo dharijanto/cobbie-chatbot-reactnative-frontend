@@ -111,8 +111,10 @@
     "react-native-iphone-x-helper": "^1.2.0",
     "react-native-lightbox": "^0.8.1",
     "react-native-parsed-text": "https://github.com/EvanBacon/react-native-parsed-text.git",
+    "react-native-reanimated": "~1.4.0",
     "react-native-safe-area-context": "0.6.0",
     "react-navigation": "^4.0.0",
+    "react-navigation-drawer": "^2.3.3",
     "react-navigation-stack": "^2.0.8",
     "uuid": "3.3.3"
   },

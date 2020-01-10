@@ -926,8 +926,8 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
             ref={(component: any) => (this._actionSheetRef = component)}
           >
             <View style={styles.container} onLayout={this.onMainViewLayout}>
-              {this.renderMessages()}
               {this.renderInputToolbar()}
+              {this.renderMessages()}
             </View>
           </ActionSheetProvider>
         </SafeAreaView>
@@ -943,7 +943,8 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    flexDirection: 'column-reverse'
   },
   safeArea: {
     flex: 1,

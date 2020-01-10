@@ -25,6 +25,8 @@ import { warning } from './utils'
 
 const styles = StyleSheet.create({
   container: {
+    // To accommodate for navbar
+    // paddingTop: 150
     /* maxHeight: 500 */
     /* flex: 1, */
   },
@@ -354,17 +356,18 @@ export default class MessageContainer<
 
   render() {
     const { inverted } = this.props
-    const fullHeight = Dimensions.get('window').height - 50
-    let height = fullHeight
-    if (this.props.frontendAction && this.props.frontendAction.responses.length > 0) {
-      height = fullHeight - this.props.frontendAction.responses.length * 52
-    }
+    // No longer need to hard-code the buttons size because we're using flex direction column-reverse
+    // const fullHeight = Dimensions.get('window').height - 50
+    // let height = fullHeight
+    // if (this.props.frontendAction && this.props.frontendAction.responses.length > 0) {
+    //   height = fullHeight - this.props.frontendAction.responses.length * 52
+    // }
     return (
       <View
         style={
           [ this.props.alignTop ? styles.containerAlignTop : styles.container,
             {
-              height
+              // height // No longer hard-coding height
             }]
         }
       >

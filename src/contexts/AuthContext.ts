@@ -35,7 +35,11 @@ apiCalls.login = (dispatch: Dispatcher<ACTION_TYPE>) => async (username: string,
     if (resp.status && resp.data) {
       const userId = resp.data
       dispatch({ type: 'LOGIN', payload: userId })
-      return { status: true, data: userId }
+      // TODO: Save to asyncStorage
+      // return AsyncStorage.setItem('userId', )
+      return AsyncStorage.setItem('userId', '' + userId).then(() => {
+        return { status: true, data: userId }
+      })
       // navigate('ChatScreen', {})
     } else {
       throw new Error(resp.errMessage)
