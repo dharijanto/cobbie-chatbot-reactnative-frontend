@@ -10,7 +10,7 @@ import CustomView from '../example-expo/CustomView'
 import NavBar from '../example-expo/NavBar'
 import messagesData from '../example-expo/data/messages'
 import earlierMessages from '../example-expo/data/earlierMessages'
-import { navigate } from '../utils/navigation-helper';
+import { navigate, navigateWithStack } from '../utils/navigation-helper';
 import { NavigationActions } from 'react-navigation';
 
 const styles = StyleSheet.create({
@@ -262,7 +262,7 @@ export default class App extends Component<ChatScreenProps> {
   renderQuickReplySend = () => <Text>{' custom send =>'}</Text>
 
   onProfileClicked = () => {
-    navigate('ProfileScreen', { userId: this.props.navigation.getParam('userId', 0) })
+    navigateWithStack('ProfileScreen', { userId: this.props.navigation.getParam('userId', 0) })
     console.log('onProfileClicked()')
   }
 

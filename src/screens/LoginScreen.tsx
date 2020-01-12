@@ -1,46 +1,52 @@
 import React, { Component, useState, useContext, useEffect } from 'react'
 import { View, Text, Image, TextInput, TouchableHighlight, StyleSheet, Button } from 'react-native'
 import { Context as AuthContext } from '../contexts/AuthContext'
-import { navigate } from '../utils/navigation-helper';
+import { navigate, navigateWithStack } from '../utils/navigation-helper';
 
 export default () => {
+  const { state: authState, login, tryLocalLogin } = useContext<any>(AuthContext)
   useEffect(() => {
     console.log('LoginScreen...')
+    tryLocalLogin().then((resp: any) => {
+      console.log('LoadingScreen.tryLocalLogin(): resp=' + JSON.stringify(resp))
+      if (resp.status && resp.data) {
+        navigateWithStack('ChatScreen', { userId: resp.data })
+      }
+    })
   }, [])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const { state: authState, login } = useContext<any>(AuthContext)
 
   const styles = StyleSheet.create({
-    mascot: {
+    companyLogo: {
       width: 120,
       height: 120,
       marginBottom: 50
     },
-    companyLogo: {
-      width: 300,
-      height: 100,
+    mascot: {
+      width: 400,
+      height: 150,
       marginBottom: 30
     },
     container: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#DCDCDC',
+      backgroundColor: '#3e3935',
     },
     errMessageContainer: {
       marginBottom: 15
     },
     inputContainer: {
-        borderBottomColor: '#F5FCFF',
-        backgroundColor: '#FFFFFF',
-        borderRadius:30,
-        borderBottomWidth: 1,
-        width:250,
-        height:45,
-        marginBottom:20,
-        flexDirection: 'row',
-        alignItems:'center'
+      borderBottomColor: '#F5FCFF',
+      backgroundColor: '#FFFFFF',
+      borderRadius:30,
+      borderBottomWidth: 1,
+      width:250,
+      height:45,
+      marginBottom:20,
+      flexDirection: 'row',
+      alignItems:'center'
     },
     inputs:{
         height:45,
@@ -84,7 +90,7 @@ export default () => {
       console.log(`login: username=${username} password=${password}`)
       login(username, password).then((resp: any) => {
         if (resp.status && resp.data) {
-          navigate('ChatScreen', { userId: resp.data })
+          navigateWithStack('ChatScreen', { userId: resp.data })
         }
       })
       default:
@@ -94,7 +100,7 @@ export default () => {
   return (
 
     <View style={styles.container}>
-      <Image source={require('../../media/company-logo.png')} style={styles.companyLogo} resizeMode='contain' />
+      <Image source={require('../../media/mascot-with-text.png')} style={styles.mascot} resizeMode='contain' />
       <View style={styles.inputContainer}>
         <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
         <TextInput style={styles.inputs}
@@ -127,6 +133,7 @@ export default () => {
       <TouchableHighlight style={[styles.buttonContainer, styles.registerButton]} onPress={() => onClickListener('REGISTER')}>
           <Text style={styles.registerText}>Register</Text>
       </TouchableHighlight>
+      <Image source={require('../../media/company-logo.png')} style={styles.companyLogo} resizeMode='contain' />
     </View>
   );
 }
