@@ -12,6 +12,7 @@ import messagesData from '../example-expo/data/messages'
 import earlierMessages from '../example-expo/data/earlierMessages'
 import { navigate, navigateWithStack } from '../utils/navigation-helper';
 import { NavigationActions } from 'react-navigation';
+import cobbieService from '../services/cobbie-service';
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -262,8 +263,17 @@ export default class App extends Component<ChatScreenProps> {
   renderQuickReplySend = () => <Text>{' custom send =>'}</Text>
 
   onProfileClicked = () => {
-    navigateWithStack('ProfileScreen', { userId: this.props.navigation.getParam('userId', 0) })
     console.log('onProfileClicked()')
+    const userId = this.props.navigation.getParam('userId', 0)
+    cobbieService.getProfileResult(userId).then(resp => {
+      if (resp.status && resp.data) {
+        navigateWithStack('ProfileScreen', { userId, profile: resp.data })
+      } else {
+        Alert.alert('Profile could not be retrieved: ' + resp.errMessage)
+      }
+    }).catch(err => {
+      Alert.alert('Failed to retrieve profile result: ' + err.message)
+    })
   }
 
   render() {
@@ -294,7 +304,7 @@ export default class App extends Component<ChatScreenProps> {
           user={user}
           scrollToBottom
           onLongPressAvatar={user => Alert.alert(JSON.stringify(user))}
-          onPressAvatar={() => Alert.alert('short press')}
+          onPressAvatar={() => {}}
           onQuickReply={this.onQuickReply}
           keyboardShouldPersistTaps='never'
           renderAccessory={Platform.OS === 'web' ? undefined : this.renderAccessory}

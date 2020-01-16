@@ -15,6 +15,7 @@ import {
   TextStyle,
   KeyboardAvoidingView,
   Dimensions,
+  Alert,
 } from 'react-native'
 
 import {
@@ -52,6 +53,7 @@ import {
 } from './Constant'
 import { IMessage, User, Reply, LeftRightStyle, FrontendResponse, FrontendAction } from './types'
 import QuickReplies from './QuickReplies'
+import { navigate } from './utils/navigation-helper';
 
 // const GiftedActionSheet = ActionSheet as any
 
@@ -444,9 +446,12 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
       if (resp.status && resp.data) {
         this.onBackendResponse(resp.data)
       } else {
-        console.error('Failed to retrieve chatbot state: ' + resp.errMessage)
+        throw new Error(resp.errMessage)
       }
-
+    }).catch(err => {
+      // If we fail, re-login
+      Alert.alert('Failed to retrieve chatbot state: ' + err.message)
+      navigate('LoginScreen', { useLocalLogin: false })
     })
   }
 

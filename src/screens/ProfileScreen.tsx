@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
+  TouchableHighlight,
+  Modal,
   Image,
   Alert,
   ScrollView,
@@ -11,24 +13,26 @@ import {
 } from 'react-native';
 
 export default class Home extends Component {
-
   constructor(props: any) {
-    super(props);
+    super(props)
     this.state = {
+      blurbVisible: false
+    }
+    /* this.state = {
       workAreas: [
-        {id:1,  title: "Task Volume", color:"#51d69f", image:"https://img.icons8.com/color/70/000000/name.png"},
-        {id:2,  title: "Control", color:"#ff527f", image:"https://img.icons8.com/office/70/000000/home-page.png"},
-        {id:3,  title: "Pay & Incentives", color:"#51d69f", image:"https://img.icons8.com/color/70/000000/two-hearts.png"},
-        {id:4,  title: "Community", color:"#ff527f", image:"https://img.icons8.com/color/70/000000/name.png"},
-        {id:5,  title: "Justice", color:"#fdb83f", image:"https://img.icons8.com/office/70/000000/home-page.png"},
-        {id:6,  title: "Standards", color:"#51d69f", image:"https://img.icons8.com/color/70/000000/two-hearts.png"}
+        {id:1,  title: "Workload", score: 80, color:"#51d69f"},
+        {id:2,  title: "Control", score: 80, color:"#ff527f"},
+        {id:3,  title: "Rewards", score: 80, color:"#51d69f"},
+        {id:4,  title: "Community", score: 80, color:"#ff527f"},
+        {id:5,  title: "Justice", score: 80, color:"#fdb83f"},
+        {id:6,  title: "Values", score: 80, color:"#51d69f"}
       ],
       personalAreas: [
-        {id:4,  title: "Exhaustion",   color:"#fdb83f", image:"https://img.icons8.com/color/70/000000/family.png"} ,
-        {id:5,  title: "Depersonalization",  color:"#ff527f", image:"https://img.icons8.com/color/70/000000/groups.png"} ,
-        {id:6,  title: "Personal Accomplishment",   color:"#51d69f", image:"https://img.icons8.com/color/70/000000/classroom.png"}
+        {id:4,  title: "Exhaustion", score: 80, color:"#fdb83f"} ,
+        {id:5,  title: "Depersonalization", score: 80, color:"#ff527f"} ,
+        {id:6,  title: "Personal Accomplishment", score: 80, color:"#51d69f"}
       ]
-    };
+    }; */
   }
 
   componentDidMount () {
@@ -36,7 +40,7 @@ export default class Home extends Component {
   }
 
   clickEventListener(item) {
-    Alert.alert(item.title)
+    Alert.alert(item.blurb)
   }
   renderBubble (item: any) {
     return (
@@ -45,10 +49,10 @@ export default class Home extends Component {
           <View style={{alignItems:"center", justifyContent:"center", width: 80}}>
             <Text style={[styles.title]}>{item.title}</Text>
             <TouchableOpacity
-                style={[styles.card, {backgroundColor:item.color}]}
+                style={[styles.card, {backgroundColor: item.color}]}
                 onPress={() => {this.clickEventListener(item)}}>
               {/* <Image style={styles.cardImage} source={{uri:item.image}}/> */}
-              <Text> 80 </Text>
+              <Text> {item.score} </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -59,29 +63,45 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.blurbVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <View style={{marginTop: 22}}>
+            <View>
+              <Text>Hello World!</Text>
+
+              <TouchableHighlight
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text>Hide Modal</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
         <Text style={{ fontSize: 20, marginLeft: 10, fontWeight: 'bold' }}> Personal Profile </Text>
         <View style={{flex: 1}}>
           <Text style={{ fontSize: 16, marginTop: 30, marginLeft: 25, fontWeight: 'bold' }}> Work Areas </Text>
           <FlatList style={styles.list}
             contentContainerStyle={styles.listContainer}
-            data={this.state.workAreas}
+            keyExtractor={(item: any, index: number) => item.title}
+            data={this.props.navigation.getParam('profile', 0).workAreas}
             horizontal={false}
             numColumns={3}
-            keyExtractor= {(item) => {
-              return item.id;
-            }}
             renderItem={({item}) => this.renderBubble(item)}/>
         </View>
         <View style={{flex: 1}}>
           <Text style={{ fontSize: 16, marginTop: 0, marginLeft: 25, fontWeight: 'bold' }}> Personal Areas </Text>
           <FlatList style={styles.list}
             contentContainerStyle={styles.listContainer}
-            data={this.state.personalAreas}
+            keyExtractor={(item: any, index: number) => item.title}
+            data={this.props.navigation.getParam('profile', 0).personalAreas}
             horizontal={false}
             numColumns={3}
-            keyExtractor= {(item) => {
-              return item.id;
-            }}
             renderItem={({item}) => this.renderBubble(item)}/>
         </View>
       </View>

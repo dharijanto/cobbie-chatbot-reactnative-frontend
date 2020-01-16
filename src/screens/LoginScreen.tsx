@@ -3,16 +3,18 @@ import { View, Text, Image, TextInput, TouchableHighlight, StyleSheet, Button } 
 import { Context as AuthContext } from '../contexts/AuthContext'
 import { navigate, navigateWithStack } from '../utils/navigation-helper';
 
-export default () => {
+export default (props: any) => {
   const { state: authState, login, tryLocalLogin } = useContext<any>(AuthContext)
   useEffect(() => {
     console.log('LoginScreen...')
-    tryLocalLogin().then((resp: any) => {
-      console.log('LoadingScreen.tryLocalLogin(): resp=' + JSON.stringify(resp))
-      if (resp.status && resp.data) {
-        navigateWithStack('ChatScreen', { userId: resp.data })
-      }
-    })
+    if (props.navigation.getParam('useLocalLogin', true)) {
+      tryLocalLogin().then((resp: any) => {
+        console.log('LoadingScreen.tryLocalLogin(): resp=' + JSON.stringify(resp))
+        if (resp.status && resp.data) {
+          navigateWithStack('ChatScreen', { userId: resp.data })
+        }
+      })
+    }
   }, [])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
