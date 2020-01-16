@@ -10,39 +10,27 @@ import {
   Alert,
   ScrollView,
   FlatList,
+  SafeAreaView,
 } from 'react-native';
+import {YellowBox} from 'react-native';
+import { whileStatement } from '@babel/types';
+YellowBox.ignoreWarnings([ 'VirtualizedLists should never be nested' ]);
 
-export default class Home extends Component {
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      blurbVisible: false
-    }
-    /* this.state = {
-      workAreas: [
-        {id:1,  title: "Workload", score: 80, color:"#51d69f"},
-        {id:2,  title: "Control", score: 80, color:"#ff527f"},
-        {id:3,  title: "Rewards", score: 80, color:"#51d69f"},
-        {id:4,  title: "Community", score: 80, color:"#ff527f"},
-        {id:5,  title: "Justice", score: 80, color:"#fdb83f"},
-        {id:6,  title: "Values", score: 80, color:"#51d69f"}
-      ],
-      personalAreas: [
-        {id:4,  title: "Exhaustion", score: 80, color:"#fdb83f"} ,
-        {id:5,  title: "Depersonalization", score: 80, color:"#ff527f"} ,
-        {id:6,  title: "Personal Accomplishment", score: 80, color:"#51d69f"}
-      ]
-    }; */
+export default (props: any) => {
+  useEffect(() => {
+
+  }, [])
+
+  const [blurbModalVisible, setBlurbModalVisible] = useState(false)
+  const [blurb, setBlurb] = useState('')
+
+  const clickEventListener = (item: any) => {
+    // Alert.alert(item.blurb)
+    setBlurb(item.blurb)
+    setBlurbModalVisible(true)
   }
 
-  componentDidMount () {
-    console.log('userId=' + this.props.navigation.getParam('userId', 0))
-  }
-
-  clickEventListener(item) {
-    Alert.alert(item.blurb)
-  }
-  renderBubble (item: any) {
+  const renderBubble = (item: any) => {
     return (
       <View style={{marginTop: 10}}>
         <View style={styles.cardHeader}>
@@ -50,7 +38,7 @@ export default class Home extends Component {
             <Text style={[styles.title]}>{item.title}</Text>
             <TouchableOpacity
                 style={[styles.card, {backgroundColor: item.color}]}
-                onPress={() => {this.clickEventListener(item)}}>
+                onPress={() => {clickEventListener(item)}}>
               {/* <Image style={styles.cardImage} source={{uri:item.image}}/> */}
               <Text> {item.score} </Text>
             </TouchableOpacity>
@@ -60,60 +48,80 @@ export default class Home extends Component {
     )
   }
 
-  render() {
-    return (
-      <View style={styles.container}>
+  return (
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <ScrollView contentContainerStyle={styles.container}>
         <Modal
           animationType="slide"
           transparent={false}
-          visible={this.state.blurbVisible}
+          visible={blurbModalVisible}
+          presentationStyle='pageSheet'
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
+            setBlurbModalVisible(false)
           }}>
-          <View style={{marginTop: 22}}>
+          <View style={styles.blurbContainer}>
             <View>
-              <Text>Hello World!</Text>
-
+              <Text style={{fontSize: 25, fontWeight: 'bold'}}>{blurb}</Text>
               <TouchableHighlight
                 onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
+                  setBlurbModalVisible(!blurbModalVisible);
                 }}>
-                <Text>Hide Modal</Text>
+                <View style={{flexDirection: 'row-reverse'}}>
+                  <Text style={{marginTop: 15}}>Okay</Text>
+                </View>
               </TouchableHighlight>
             </View>
           </View>
         </Modal>
-        <Text style={{ fontSize: 20, marginLeft: 10, fontWeight: 'bold' }}> Personal Profile </Text>
+        <View style={{backgroundColor: '#3e3935', flex: 0.5}}>
+          <Image source={require('../../media/company-logo.png')} style={{marginLeft: 20, height: 80, width: 150}} resizeMode='contain' />
+        </View>
+        <View style={{flex: 1, flexDirection: 'row', marginTop: 30}}>
+          <View style={{flex: 0.5, marginRight: 15, marginTop: 10, height: 15, backgroundColor: '#3e3935', justifyContent: 'center'}} />
+        </View>
+        <Text style={{flex: 1, fontSize: 20, fontWeight: 'bold' }}> Personal Profile </Text>
+
         <View style={{flex: 1}}>
-          <Text style={{ fontSize: 16, marginTop: 30, marginLeft: 25, fontWeight: 'bold' }}> Work Areas </Text>
+          <View style={{flexDirection: 'row', marginTop: 30, marginLeft: 25}}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}> Work Areas </Text>
+            <View style={{flex: 2, marginLeft: 5, marginRight: 15, marginTop: 10, height: 5, backgroundColor: '#3e3935', justifyContent: 'center'}} />
+          </View>
           <FlatList style={styles.list}
+            scrollEnabled={false}
             contentContainerStyle={styles.listContainer}
             keyExtractor={(item: any, index: number) => item.title}
-            data={this.props.navigation.getParam('profile', 0).workAreas}
+            data={props.navigation.getParam('profile', 0).workAreas}
             horizontal={false}
             numColumns={3}
-            renderItem={({item}) => this.renderBubble(item)}/>
+            renderItem={({item}) => renderBubble(item)}/>
         </View>
         <View style={{flex: 1}}>
-          <Text style={{ fontSize: 16, marginTop: 0, marginLeft: 25, fontWeight: 'bold' }}> Personal Areas </Text>
+          <View style={{flexDirection: 'row', marginTop: 30, marginLeft: 25}}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}> Personal Areas </Text>
+            <View style={{flex: 2, marginLeft: 5, marginRight: 15, marginTop: 10, height: 5, backgroundColor: '#3e3935', justifyContent: 'center'}} />
+          </View>
           <FlatList style={styles.list}
+            scrollEnabled={false}
             contentContainerStyle={styles.listContainer}
             keyExtractor={(item: any, index: number) => item.title}
-            data={this.props.navigation.getParam('profile', 0).personalAreas}
+            data={props.navigation.getParam('profile', 0).personalAreas}
             horizontal={false}
             numColumns={3}
-            renderItem={({item}) => this.renderBubble(item)}/>
+            renderItem={({item}) => renderBubble(item)}/>
         </View>
-      </View>
-    );
-  }
+        {/* <View style={{flex: 1, backgroundColor: '#3e3935', flexDirection: 'row-reverse'}}>
+          <Image source={require('../../media/colored-stripes.png')} style={{height: 40, width: 150}} resizeMode='contain' />
+        </View> */}
+      </ScrollView>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
   container:{
-    flex: 1,
-    marginTop:40,
-    backgroundColor:'#fff',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    backgroundColor:'#fff'
   },
   list: {
     flex: 1,
@@ -178,4 +186,11 @@ const styles = StyleSheet.create({
     flex:1,
     alignSelf:'center'
   },
+  blurbContainer: {
+    // backgroundColor: '#3e3935',
+    margin: 50,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });

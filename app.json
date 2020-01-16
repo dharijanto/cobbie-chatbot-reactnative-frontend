@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "gifted-chat-example",
-    "description": "Gifted Chat Expo Example",
-    "slug": "example-expo",
+    "name": "Cobbie Frontend",
+    "description": "v0.2",
+    "slug": "cobbie-frontend",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [

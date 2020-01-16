@@ -2,7 +2,6 @@ import React, { Component, useEffect, useContext } from 'react'
 import { Context as AuthContext } from '../contexts/AuthContext'
 import { View, Text } from 'react-native'
 import { navigate } from '../utils/navigation-helper';
-
 export default () => {
   const { tryLocalLogin } = useContext<any>(AuthContext)
   useEffect(() => {
@@ -15,6 +14,7 @@ export default () => {
       }
     }) */
     navigate('LoginScreen', {})
+    // navigate('ProfileScreen', { profile: require('../example-expo/data/profile.json')})
   }, [])
 
   return (

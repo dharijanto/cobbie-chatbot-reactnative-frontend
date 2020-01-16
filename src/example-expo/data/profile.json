@@ -1,0 +1,69 @@
+{
+  "workAreas": [
+      {
+          "title": "Workload",
+          "score": "67",
+          "sheetColor": "Green",
+          "color": "#51d69f",
+          "blurb": "You do not stand out from your peers, and you probably manage your work, time, and people well."
+      },
+      {
+          "title": "Control",
+          "score": "53",
+          "sheetColor": "Green",
+          "color": "#51d69f",
+          "blurb": "When compared to your peers, you show the a normal amount of personal autonomy and control over your work. You probably feel like you are in control of your work and your future. Read more about this area here:"
+      },
+      {
+          "title": "Rewards",
+          "score": "33",
+          "sheetColor": "Green",
+          "color": "#51d69f",
+          "blurb": "You don’t stand out from your peers, and you feel that your work represents your rewards."
+      },
+      {
+          "title": "Community",
+          "score": "27",
+          "sheetColor": "Green",
+          "color": "#51d69f",
+          "blurb": "You share the same sense of community as your peers."
+      },
+      {
+          "title": "Justice",
+          "score": "33",
+          "sheetColor": "Green",
+          "color": "#51d69f",
+          "blurb": "You hold similar views to others at work about equality, favoritism, and justice at work."
+      },
+      {
+          "title": "Standards",
+          "score": "60",
+          "sheetColor": "Green",
+          "color": "#51d69f",
+          "blurb": "You and your peers hold similar values when aligning with company standards."
+      }
+  ],
+  "personalAreas": [
+      {
+          "title": "Exhaustion",
+          "score": "80",
+          "sheetColor": "Yellow",
+          "color": "#fdb83f",
+          "blurb": "You are probably exhausted mentally or physically, and it is potentially a source impacting your well-being. Learn more here about how to improve:"
+      },
+      {
+          "title": "Depersonalization",
+          "score": "27",
+          "sheetColor": "Green",
+          "color": "#51d69f",
+          "blurb": "You have a similar outlook on your peers as others."
+      },
+      {
+          "title": "Personal Accomplishment",
+          "score": "73",
+          "sheetColor": "Green",
+          "color": "#51d69f",
+          "blurb": "Your feelings of accomplishments and impact are similar to your peers."
+      }
+  ]
+}
