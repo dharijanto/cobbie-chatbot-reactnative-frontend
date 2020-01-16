@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Text, Platform, SafeAreaView } from 'react-native'
+import { Button, Text, Platform, TouchableHighlight, View, SafeAreaView, TouchableOpacity } from 'react-native'
 import NavBar, { NavTitle, NavButton } from 'react-native-nav'
 import Constants from 'expo-constants'
 
@@ -18,7 +18,9 @@ export default function NavBarCustom(props: any) {
           </Text>
         </NavTitle>
         <NavButton />
-        <Button title="Profile" onPress={props.onProfileClicked}/>
+        <TouchableOpacity onPress={props.onProfileClicked} style={{alignContent: 'center', justifyContent: 'center'}}>
+          <Text style={{marginTop: 15, fontWeight: 'bold'}}>Profile</Text>
+        </TouchableOpacity>
       </NavBar>
     </SafeAreaView>
   )
