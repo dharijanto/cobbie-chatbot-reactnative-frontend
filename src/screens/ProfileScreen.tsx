@@ -49,7 +49,7 @@ export default (props: any) => {
   }
 
   return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView contentContainerStyle={styles.container}>
         <Modal
           animationType="slide"
@@ -61,15 +61,15 @@ export default (props: any) => {
           }}>
           <View style={styles.blurbContainer}>
             <View>
-              <Text style={{fontSize: 25, fontWeight: 'bold'}}>{blurb}</Text>
-              <TouchableHighlight
+              <Text style={{fontSize: 25}}>{blurb}</Text>
+              <TouchableOpacity
                 onPress={() => {
                   setBlurbModalVisible(!blurbModalVisible);
                 }}>
                 <View style={{flexDirection: 'row-reverse'}}>
-                  <Text style={{marginTop: 15}}>Okay</Text>
+                  <Text style={{marginTop: 15, fontWeight: 'bold'}}>Okay</Text>
                 </View>
-              </TouchableHighlight>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -113,7 +113,7 @@ export default (props: any) => {
           <Image source={require('../../media/colored-stripes.png')} style={{height: 40, width: 150}} resizeMode='contain' />
         </View> */}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   )
 }
 

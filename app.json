@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Cobbie Frontend",
-    "description": "v0.2",
+    "description": "v0.3",
     "slug": "cobbie-frontend",
     "privacy": "public",
     "sdkVersion": "36.0.0",
