@@ -11,4 +11,4 @@
 
 We were exploring a startup idea to assist HR on figuring out the well-being of their employees. The idea is to create a chatbot-buddy that personally interacts with each of the employees, continously asking some short of surveys to monitor their mental well-being. This was a proof-of-concept we build in order to gauge potential investor's interest.
 
-This react-native code powers the frontend of the chatbot. It uses this backend: https://github.com/dharijanto/cobbie-api-backend. Note that I didn't code this from scratch, instead I built this on top of FaridSafi's awesome opensource chatbot project: https://github.com/FaridSafi/react-native-gifted-chat
+This react-native code powers the frontend of the chatbot. It uses this backend: https://github.com/dharijanto/cobbie-chatbot-api-backend. Note that I didn't code this from scratch, instead I built this on top of FaridSafi's awesome opensource chatbot project: https://github.com/FaridSafi/react-native-gifted-chat
